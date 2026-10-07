@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Nguyễn Quang Huy | Frontend Developer</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS CSS (Scroll Reveal via CSS Transforms) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Cấu hình Tailwind Custom Theme -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            },
+            colors: {
+              brand: { dark: '#0b1120', card: '#1e293b' }
+            },
+            /* Animation dùng thuần transform để chạy trên GPU */
+            animation: { 
+                'blob': 'blob 7s infinite',
+                'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: { 
+                blob: { 
+                    '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                    '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                    '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                    '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                },
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-15px)' },
+                }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: #0b1120;
+        color: #f8fafc;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+
+      /* Skip link tối ưu A11y & GPU Acceleration (dùng transform thay top/left) */
+      .skip-link {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: #22d3ee;
+        color: #0f172a;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border-radius: 0.375rem;
+        z-index: 100;
+        transform: translateY(-200%);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        will-change: transform;
+      }
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      /* Glassmorphism */
+      .glass {
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+      }
+      
+      /* Text Gradient */
+      .text-gradient {
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Nút bấm Premium (Dùng transform: translateY) */
+      .btn-premium {
+        position: relative;
+        padding: 12px 28px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 9999px;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+        overflow: hidden;
+        z-index: 1;
+        will-change: transform;
+      }
+      .btn-premium::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: -1;
+      }
+      .btn-premium:hover::before {
+        opacity: 1;
+      }
+      .btn-premium:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.5);
+      }
+
+      /* Nav Link Underline tối ưu bằng transform: scaleX thay vì width */
+      .nav-link {
+        position: relative;
+      }
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 100%; height: 2px;
+        bottom: -4px; left: 0;
+        background-color: #00f2fe;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+        will-change: transform;
+      }
+      .nav-link:hover::after {
+        transform: scaleX(1);
+      }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col justify-between">
+
+    <a href="#main-content" class="skip-link">Chuyển đến nội dung chính</a>
+
+    <!-- Background Blob Gradients (GPU Rendered) -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-[-1] overflow-hidden">
+      <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
+      <div class="absolute top-[30%] right-[-10%] w-[400px] h-[400px] bg-purple-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob" style="animation-delay: 2s"></div>
+      <div class="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] animate-blob" style="animation-delay: 4s"></div>
+    </div>
+
+    <!-- Thanh Menu / Navigation -->
+    <header role="banner" class="glass sticky top-0 z-50 px-6 py-4 border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-black tracking-tighter text-white">
+                NQH<span class="text-cyan-400">.dev</span>
+            </a>
+            
+            <nav aria-label="Main Navigation" class="hidden md:block">
+                <ul class="flex gap-8 font-medium text-sm tracking-wide">
+                    <li><a href="#hero" class="nav-link text-slate-300 hover:text-white transition-colors">TRANG CHỦ</a></li>
+                    <li><a href="#about" class="nav-link text-slate-300 hover:text-white transition-colors">GIỚI THIỆU</a></li>
+                    <li><a href="#skills" class="nav-link text-slate-300 hover:text-white transition-colors">KỸ NĂNG</a></li>
+                    <li><a href="#projects" class="nav-link text-slate-300 hover:text-white transition-colors">DỰ ÁN</a></li>
+                    <li><a href="#contact" class="nav-link text-slate-300 hover:text-white transition-colors">LIÊN HỆ</a></li>
+                </ul>
+            </nav>
+
+            <div class="md:hidden">
+                <button type="button" id="menu-btn" class="text-slate-300 hover:text-white p-2 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 px-2 border-t border-white/10 mt-3">
+            <ul class="flex flex-col gap-4 font-medium text-sm">
+                <li><a href="#hero" class="block text-slate-300 hover:text-cyan-400 transition-colors py-1">Trang chủ</a></li>
+                <li><a href="#about" class="block text-slate-300 hover:text-cyan-400 transition-colors py-1">Giới thiệu</a></li>
+                <li><a href="#skills" class="block text-slate-300 hover:text-cyan-400 transition-colors py-1">Kỹ năng</a></li>
+                <li><a href="#projects" class="block text-slate-300 hover:text-cyan-400 transition-colors py-1">Dự án</a></li>
+                <li><a href="#contact" class="block text-slate-300 hover:text-cyan-400 transition-colors py-1">Liên hệ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main id="main-content" role="main" class="relative z-10 flex-grow">
+        <!-- Hero Section -->
+        <section id="hero" aria-labelledby="hero-heading" class="min-h-[85vh] flex items-center">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <div class="inline-block px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                        👋 Chào mừng bạn ghé thăm Portfolio
+                    </div>
+                    <h1 id="hero-heading" class="text-4xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+                        Xin chào, tôi là <br/>
+                        <span class="text-gradient">Nguyễn Quang Huy</span>
+                    </h1>
+                    <p class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
+                        Lập trình viên Web Frontend đam mê xây dựng giao diện mượt mà, tối ưu trải nghiệm người dùng và chuẩn tiếp cận A11y.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contact" class="btn-premium text-white flex items-center gap-2">
+                            Liên Hệ Ngay <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </a>
+                        <a href="#projects" class="px-7 py-3 rounded-full font-semibold border border-slate-600 hover:border-slate-400 hover:bg-slate-800 transition-all">
+                            Xem Dự Án
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Avatar Nam với hiệu ứng Floating bằng Transform -->
+                <div class="relative flex justify-center" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500 to-purple-500 rounded-full blur-[80px] opacity-30 animate-pulse"></div>
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Chân dung Nguyễn Quang Huy" class="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full border-4 border-white/10 shadow-2xl animate-float object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- Giới thiệu bản thân -->
+        <section id="about" aria-labelledby="about-heading" class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-white/5">
+            <div class="glass p-8 sm:p-12 rounded-3xl" data-aos="fade-up">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div>
+                        <h2 id="about-heading" class="text-3xl font-extrabold mb-3">Về <span class="text-gradient">Bản Thân</span></h2>
+                        <p class="text-slate-400 text-sm">Hiểu rõ hơn về con người và hành trình học tập chuyên môn của tôi.</p>
+                    </div>
+                    <div class="lg:col-span-2 space-y-4 text-slate-300 leading-relaxed">
+                        <p>
+                            Tôi tên là <strong class="text-white">Nguyễn Quang Huy</strong>, hiện đang là sinh viên ngành Lập trình Web / Frontend Development. Tôi yêu thích việc biến các bản vẽ thiết kế phức tạp thành sản phẩm thực tế có khả năng tương tác cao.
+                        </p>
+                        <p>
+                            <strong class="text-cyan-400">Mục tiêu nghề nghiệp:</strong> Trở thành một <strong class="text-white">Full-stack Developer</strong> chuyên nghiệp trong 3 năm tới, làm chủ các công nghệ hiện đại và đóng góp giá trị cho các dự án công nghệ lớn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kỹ năng -->
+        <section id="skills" aria-labelledby="skills-heading" class="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+            <div class="text-center mb-14" data-aos="fade-up">
+                <h2 id="skills-heading" class="text-3xl sm:text-4xl font-extrabold mb-4">Kỹ Năng <span class="text-gradient">Chuyên Môn</span></h2>
+                <p class="text-slate-400 max-w-xl mx-auto">Các công cụ và công nghệ tôi sử dụng hàng ngày để xây dựng sản phẩm.</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                <div class="glass p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-html5"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-1">HTML5 / CSS3</h3>
+                    <p class="text-xs text-slate-400">Semantic & Responsive</p>
+                </div>
+
+                <div class="glass p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-js"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-1">JavaScript</h3>
+                    <p class="text-xs text-slate-400">ES6+ & DOM Logic</p>
+                </div>
+
+                <div class="glass p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-figma"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-1">Figma</h3>
+                    <p class="text-xs text-slate-400">UI/UX Design Concept</p>
+                </div>
+
+                <div class="glass p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-1">Git / GitHub</h3>
+                    <p class="text-xs text-slate-400">Version Control & Group</p>
+                </div>
+
+                <div class="glass p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="500">
+                    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-wordpress"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-1">WordPress</h3>
+                    <p class="text-xs text-slate-400">CMS & Custom Themes</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dự án -->
+        <section id="projects" aria-labelledby="projects-heading" class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-white/5">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 id="projects-heading" class="text-3xl sm:text-4xl font-extrabold mb-4">Dự Án <span class="text-gradient">Nổi Bật</span></h2>
+                <p class="text-slate-400 max-w-xl mx-auto">Các dự án cá nhân và làm việc nhóm tôi đã thực hiện.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card Dự án nâng hiệu năng hover dùng transform: translateY(-12px) -->
+                <article class="glass rounded-2xl overflow-hidden group flex flex-col justify-between hover:-translate-y-3 transition-transform duration-500 border border-white/5" data-aos="fade-up" data-aos-delay="100">
+                    <div>
+                        <figure class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="DataViz Dashboard" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </figure>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="px-2.5 py-0.5 bg-cyan-500/10 text-cyan-400 text-xs font-semibold rounded-md border border-cyan-500/20">HTML5</span>
+                                <span class="px-2.5 py-0.5 bg-yellow-500/10 text-yellow-400 text-xs font-semibold rounded-md border border-yellow-500/20">JavaScript</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-white">DataViz Dashboard</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">Hệ thống phân tích dữ liệu trực quan với biểu đồ tương tác mượt mà.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500 hover:text-slate-900 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
+                        </a>
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </article>
+
+                <article class="glass rounded-2xl overflow-hidden group flex flex-col justify-between hover:-translate-y-3 transition-transform duration-500 border border-white/5" data-aos="fade-up" data-aos-delay="200">
+                    <div>
+                        <figure class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="E-Commerce Web" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </figure>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="px-2.5 py-0.5 bg-blue-500/10 text-blue-400 text-xs font-semibold rounded-md border border-blue-500/20">Tailwind</span>
+                                <span class="px-2.5 py-0.5 bg-purple-500/10 text-purple-400 text-xs font-semibold rounded-md border border-purple-500/20">JS ES6</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-white">E-Commerce Flow</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">Trang mua sắm thương mại điện tử giao diện hiện đại, tối ưu tốc độ tải trang.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500 hover:text-slate-900 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
+                        </a>
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </article>
+
+                <article class="glass rounded-2xl overflow-hidden group flex flex-col justify-between hover:-translate-y-3 transition-transform duration-500 border border-white/5" data-aos="fade-up" data-aos-delay="300">
+                    <div>
+                        <figure class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80" alt="Portfolio App" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </figure>
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 text-xs font-semibold rounded-md border border-emerald-500/20">Figma</span>
+                                <span class="px-2.5 py-0.5 bg-pink-500/10 text-pink-400 text-xs font-semibold rounded-md border border-pink-500/20">WordPress</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-white">Portfolio Website</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">Website cá nhân giới thiệu sản phẩm tối ưu trải nghiệm đọc trên điện thoại.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500 hover:text-slate-900 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
+                        </a>
+                        <a href="#" class="flex-1 text-center py-2 px-3 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition-colors font-semibold text-xs flex items-center justify-center gap-1">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Thông tin cá nhân & Form -->
+        <section id="contact" aria-labelledby="contact-heading" class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-white/5" data-aos="zoom-in">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                <div class="lg:col-span-2 space-y-6">
+                    <h2 id="contact-heading" class="text-3xl font-extrabold">Thông Tin <span class="text-gradient">Cá Nhân</span></h2>
+                    <p class="text-slate-400 text-sm leading-relaxed">Đừng ngần ngại liên hệ với tôi qua thông tin bên dưới hoặc gửi tin nhắn trực tiếp.</p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">Email chính thức</p>
+                                <p class="font-semibold text-white">huy.nguyenquang@email.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">Số điện thoại</p>
+                                <p class="font-semibold text-white">+84 987 654 321</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">Khu vực sống</p>
+                                <p class="font-semibold text-white">TP. Hồ Chí Minh, Việt Nam</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3 glass p-8 rounded-3xl border border-white/10">
+                    <form action="#" method="POST" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label for="name" class="block text-xs font-medium mb-2 text-slate-300">Họ và tên <span class="text-red-500">*</span></label>
+                                <input type="text" id="name" required class="w-full bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all text-white placeholder-slate-500 text-sm" placeholder="Nguyễn Văn B">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-xs font-medium mb-2 text-slate-300">Email <span class="text-red-500">*</span></label>
+                                <input type="email" id="email" required class="w-full bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all text-white placeholder-slate-500 text-sm" placeholder="email@domain.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-xs font-medium mb-2 text-slate-300">Nội dung tin nhắn <span class="text-red-500">*</span></label>
+                            <textarea id="message" rows="4" required class="w-full bg-slate-900/60 border border-slate-700/60 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all text-white placeholder-slate-500 text-sm" placeholder="Nhập lời nhắn của bạn ở đây..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-premium w-full text-white py-3.5 text-base shadow-lg shadow-cyan-500/20">Gửi Tin Nhắn 🚀</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo" class="border-t border-white/10 bg-slate-900/60 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-6">
+            <div class="text-2xl font-black text-white">NQH<span class="text-cyan-400">.dev</span></div>
+            
+            <p class="text-slate-400 text-sm max-w-md mx-auto">Cảm ơn bạn đã xem Portfolio của Nguyễn Quang Huy. Hãy kết nối qua các mạng xã hội bên dưới!</p>
+
+            <div class="flex justify-center gap-4">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="w-11 h-11 rounded-full glass flex items-center justify-center text-lg hover:bg-slate-700 hover:text-white hover:-translate-y-1 transition-transform"><i class="fa-brands fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-11 h-11 rounded-full glass flex items-center justify-center text-lg hover:bg-blue-600 hover:text-white hover:-translate-y-1 transition-transform"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-11 h-11 rounded-full glass flex items-center justify-center text-lg hover:bg-blue-500 hover:text-white hover:-translate-y-1 transition-transform"><i class="fa-brands fa-facebook-f"></i></a>
+            </div>
+
+            <div class="border-t border-white/5 pt-6 text-slate-500 text-xs">
+                &copy; 2026 Nguyễn Quang Huy. All rights reserved. Built with Tailwind CSS & AOS.
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS JS & Mobile Menu Script -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 900,
+        once: true,
+        easing: 'ease-out-cubic',
+        offset: 50
+      });
+
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      menuBtn.addEventListener('click', () => {
+        const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+        menuBtn.setAttribute('aria-expanded', !expanded);
+        mobileMenu.classList.toggle('hidden');
+      });
+    </script>
+</body>
+</html>
